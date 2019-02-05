@@ -20,6 +20,7 @@ class CallPage extends StatefulWidget {
 class _CallPageState extends State<CallPage> {
   static final _sessions = List<VideoSession>();
   final _infoStrings = <String>[];
+  bool muted = false;
 
   @override
   void dispose() {
@@ -218,12 +219,41 @@ class _CallPageState extends State<CallPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          FloatingActionButton(
-            child: Icon(Icons.call_end),
-            backgroundColor: Colors.redAccent,
-            onPressed: () {
-              Navigator.pop(context);
-            },
+          RawMaterialButton(
+            onPressed: () => _onToggleMute(),
+            child: new Icon(
+              muted ? Icons.mic : Icons.mic_off,
+              color: muted ? Colors.white : Colors.blueAccent,
+              size: 20.0,
+            ),
+            shape: new CircleBorder(),
+            elevation: 2.0,
+            fillColor: muted?Colors.blueAccent : Colors.white,
+            padding: const EdgeInsets.all(12.0),
+          ),
+          RawMaterialButton(
+            onPressed: () => _onCallEnd(context),
+            child: new Icon(
+              Icons.call_end,
+              color: Colors.white,
+              size: 35.0,
+            ),
+            shape: new CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.redAccent,
+            padding: const EdgeInsets.all(15.0),
+          ),
+          RawMaterialButton(
+            onPressed: () => _onSwitchCamera(),
+            child: new Icon(
+              Icons.switch_camera,
+              color: Colors.blueAccent,
+              size: 20.0,
+            ),
+            shape: new CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.white,
+            padding: const EdgeInsets.all(12.0),
           )
         ],
       ),
@@ -263,6 +293,21 @@ class _CallPageState extends State<CallPage> {
                         ]));
                   })),
         ));
+  }
+
+  void _onCallEnd(BuildContext context) {
+    Navigator.pop(context);
+  }
+
+  void _onToggleMute() {
+    setState(() {
+      muted = !muted;
+    });
+    AgoraRtcEngine.muteLocalAudioStream(muted);
+  }
+
+  void _onSwitchCamera() {
+    AgoraRtcEngine.switchCamera();
   }
 
   @override
