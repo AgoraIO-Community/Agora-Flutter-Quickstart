@@ -7,6 +7,7 @@ import '../utils/settings.dart';
 class CallPage extends StatefulWidget {
   /// non-modifiable channel name of the page
   final String channelName;
+
   /// Creates a call page with given channel name.
   const CallPage({Key key, this.channelName}) : super(key: key);
 
@@ -39,6 +40,15 @@ class _CallPageState extends State<CallPage> {
   }
 
   void initialize() async {
+    if (APP_ID.isEmpty) {
+      setState(() {
+        _infoStrings
+            .add("APP_ID missing, please provide your APP_ID in settings.dart");
+        _infoStrings.add("Agora Engine is not starting");
+      });
+      return;
+    }
+
     _initAgoraRtcEngine();
     _addAgoraEventHandlers();
     // use _addRenderView everytime a native video view is needed
@@ -55,8 +65,16 @@ class _CallPageState extends State<CallPage> {
     AgoraRtcEngine.create(APP_ID);
     AgoraRtcEngine.enableVideo();
   }
+
   /// Add agora event handlers
   void _addAgoraEventHandlers() {
+    AgoraRtcEngine.onError = (int code) {
+      setState(() {
+        String info = 'onError: ' + code.toString();
+        _infoStrings.add(info);
+      });
+    };
+
     AgoraRtcEngine.onJoinChannelSuccess =
         (String channel, int uid, int elapsed) {
       setState(() {
@@ -146,7 +164,8 @@ class _CallPageState extends State<CallPage> {
 
   /// Video view row wrapper
   Widget _expandedVideoRow(List<Widget> views) {
-    List<Widget> wrappedViews = views.map((Widget view) => _videoView(view)).toList();
+    List<Widget> wrappedViews =
+        views.map((Widget view) => _videoView(view)).toList();
     return Expanded(
         child: Row(
       children: wrappedViews,
@@ -188,7 +207,7 @@ class _CallPageState extends State<CallPage> {
         ));
       default:
     }
-    return Container(child: Column(children: <Widget>[]));
+    return Container();
   }
 
   /// Toolbar layout
@@ -211,15 +230,51 @@ class _CallPageState extends State<CallPage> {
     );
   }
 
+  /// Info panel to show logs
+  Widget _panel() {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 48),
+        alignment: Alignment.bottomCenter,
+        child: FractionallySizedBox(
+          heightFactor: 0.5,
+          child: Container(
+              padding: EdgeInsets.symmetric(vertical: 48),
+              child: ListView.builder(
+                  reverse: true,
+                  itemCount: _infoStrings.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (_infoStrings.length == 0) {
+                      return null;
+                    }
+                    return Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                        child: Row(mainAxisSize: MainAxisSize.min, children: [
+                          Flexible(
+                              child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 2, horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.yellowAccent,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Text(_infoStrings[index],
+                                      style:
+                                          TextStyle(color: Colors.blueGrey))))
+                        ]));
+                  })),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text('Agora Flutter QuickStart'),
         ),
+        backgroundColor: Colors.black,
         body: Center(
             child: Stack(
-          children: <Widget>[_viewRows(), _toolbar()],
+          children: <Widget>[_viewRows(), _panel(), _toolbar()],
         )));
   }
 }
