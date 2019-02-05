@@ -9,12 +9,16 @@ class IndexPage extends StatefulWidget {
 }
 
 class IndexState extends State<IndexPage> {
-  final channelController = TextEditingController();
-  bool validateError = false;
+  /// create a channelController to retrieve text value
+  final _channelController = TextEditingController();
+
+  /// if channel textfield is validated to have error
+  bool _validateError = false;
 
   @override
   void dispose() {
-    channelController.dispose();
+    // dispose input controller
+    _channelController.dispose();
     super.dispose();
   }
 
@@ -34,9 +38,9 @@ class IndexState extends State<IndexPage> {
                   Row(children: <Widget>[
                     Expanded(
                         child: TextField(
-                      controller: channelController,
+                      controller: _channelController,
                       decoration: InputDecoration(
-                          errorText: validateError
+                          errorText: _validateError
                               ? "Channel name is mandatory"
                               : null,
                           border: UnderlineInputBorder(
@@ -44,31 +48,13 @@ class IndexState extends State<IndexPage> {
                           hintText: 'Channel name'),
                     ))
                   ]),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                  ),
                   Padding(
                       padding: EdgeInsets.symmetric(vertical: 20),
                       child: Row(
                         children: <Widget>[
                           Expanded(
                             child: RaisedButton(
-                              onPressed: () {
-                                setState(() {
-                                  channelController.text.isEmpty
-                                      ? validateError = true
-                                      : validateError = false;
-                                });
-                                if (channelController.text.isNotEmpty) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => new CallPage(
-                                                channelName:
-                                                    channelController.text,
-                                              )));
-                                }
-                              },
+                              onPressed: () => onJoin(),
                               child: Text("Join"),
                               color: Colors.blueAccent,
                               textColor: Colors.white,
@@ -79,5 +65,23 @@ class IndexState extends State<IndexPage> {
                 ],
               )),
         ));
+  }
+
+  onJoin() {
+    // update input validation
+    setState(() {
+      _channelController.text.isEmpty
+          ? _validateError = true
+          : _validateError = false;
+    });
+    if (_channelController.text.isNotEmpty) {
+      // push video page with given channel name
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => new CallPage(
+                    channelName: _channelController.text,
+                  )));
+    }
   }
 }

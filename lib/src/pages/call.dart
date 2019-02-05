@@ -5,7 +5,9 @@ import '../utils/videosession.dart';
 import '../utils/settings.dart';
 
 class CallPage extends StatefulWidget {
+  /// non-modifiable channel name of the page
   final String channelName;
+  /// Creates a call page with given channel name.
   const CallPage({Key key, this.channelName}) : super(key: key);
 
   @override
@@ -20,7 +22,7 @@ class _CallPageState extends State<CallPage> {
 
   @override
   void dispose() {
-    // clean up
+    // clean up native views & destroy sdk
     _sessions.forEach((session) {
       AgoraRtcEngine.removeNativeView(session.viewId);
     });
@@ -32,25 +34,28 @@ class _CallPageState extends State<CallPage> {
   @override
   void initState() {
     super.initState();
-
+    // initialize agora sdk
     initialize();
   }
 
   void initialize() async {
     _initAgoraRtcEngine();
     _addAgoraEventHandlers();
+    // use _addRenderView everytime a native video view is needed
     _addRenderView(0, (viewId) {
       AgoraRtcEngine.setupLocalVideo(viewId, 1);
       AgoraRtcEngine.startPreview();
+      // state can access widget directly
       AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
     });
   }
 
+  /// Create agora sdk instance and initialze
   Future<void> _initAgoraRtcEngine() async {
     AgoraRtcEngine.create(APP_ID);
     AgoraRtcEngine.enableVideo();
   }
-
+  /// Add agora event handlers
   void _addAgoraEventHandlers() {
     AgoraRtcEngine.onJoinChannelSuccess =
         (String channel, int uid, int elapsed) {
@@ -98,6 +103,8 @@ class _CallPageState extends State<CallPage> {
     };
   }
 
+  /// Create a native view and add a new video session object
+  /// The native viewId can be used to set up local/remote view
   void _addRenderView(int uid, Function(int viewId) finished) {
     Widget view = AgoraRtcEngine.createNativeView(uid, (viewId) {
       setState(() {
@@ -111,6 +118,7 @@ class _CallPageState extends State<CallPage> {
     _sessions.add(session);
   }
 
+  /// Remove a native view and remove an existing video session object
   void _removeRenderView(int uid) {
     VideoSession session = _getVideoSession(uid);
     if (session != null) {
@@ -119,20 +127,24 @@ class _CallPageState extends State<CallPage> {
     AgoraRtcEngine.removeNativeView(session.viewId);
   }
 
+  /// Helper function to filter video session with uid
   VideoSession _getVideoSession(int uid) {
     return _sessions.firstWhere((session) {
       return session.uid == uid;
     });
   }
 
+  /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
     return _sessions.map((session) => session.view).toList();
   }
 
+  /// Video view wrapper
   Widget _videoView(view) {
     return Expanded(child: Container(child: view));
   }
 
+  /// Video view row wrapper
   Widget _expandedVideoRow(List<Widget> views) {
     List<Widget> wrappedViews = views.map((Widget view) => _videoView(view)).toList();
     return Expanded(
@@ -141,6 +153,7 @@ class _CallPageState extends State<CallPage> {
     ));
   }
 
+  /// Video layout wrapper
   Widget _viewRows() {
     List<Widget> views = _getRenderViews();
     switch (views.length) {
@@ -178,6 +191,7 @@ class _CallPageState extends State<CallPage> {
     return Container(child: Column(children: <Widget>[]));
   }
 
+  /// Toolbar layout
   Widget _toolbar() {
     return Container(
       alignment: Alignment.bottomCenter,
