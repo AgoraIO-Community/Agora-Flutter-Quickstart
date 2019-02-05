@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import '../utils/videosession.dart';
+import '../utils/settings.dart';
 
 class CallPage extends StatefulWidget {
   final String channelName;
@@ -46,7 +47,7 @@ class _CallPageState extends State<CallPage> {
   }
 
   Future<void> _initAgoraRtcEngine() async {
-    AgoraRtcEngine.create(<YOUR_APP_ID>);
+    AgoraRtcEngine.create(APP_ID);
     AgoraRtcEngine.enableVideo();
   }
 
