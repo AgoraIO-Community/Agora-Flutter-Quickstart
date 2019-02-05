@@ -39,6 +39,7 @@ Once the build is complete, run the `run` command to start the app.
 ```
 
 **We recommend you to use IDE to control overall build process during development**
+
 Details about how to set up the IDE please take a look at [here](https://flutter.io/docs/get-started/editor?tab=vscode)
 
 ## Resources
