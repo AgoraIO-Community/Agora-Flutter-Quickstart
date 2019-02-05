@@ -45,8 +45,8 @@ Details about how to set up the IDE please take a look at [here](https://flutter
 ## Resources
 * Complete [API documentation](https://docs.agora.io/en/) at the Developer Center
 * [File bugs about this sample](https://github.com/AgoraIO-Community/Agora-Flutter-Quickstart/issues)
-* [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-* [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+* [Flutter lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
+* [Flutter cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
 * [Flutter online documentation](https://flutter.io/docs), which offers tutorials, samples, guidance on mobile development, and a full API reference.
 
 ## License
