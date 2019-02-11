@@ -1,5 +1,7 @@
 # Agora Flutter Quickstart
 
+*其他语言版本： [简体中文](README.zh.md)*
+
 This tutorial describes how to create an Agora account and build a sample app with Agora using [Flutter](https://flutter.io/).
 
 ## Prerequisites
@@ -59,4 +61,4 @@ Details about how to set up the IDE please take a look at [here](https://flutter
 * [Flutter online documentation](https://flutter.io/docs), which offers tutorials, samples, guidance on mobile development, and a full API reference.
 
 ## License
-This software is under the MIT License (MIT). [View the license](LICENSE.md).
+This software is under the MIT License (MIT).

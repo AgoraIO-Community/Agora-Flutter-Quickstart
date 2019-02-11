@@ -1,5 +1,7 @@
 # Agora Flutter快速入门
 
+*Other languages： [English](README.md)*
+
 本教程介绍如何使用[Flutter]（https://flutter.io/）创建Agora帐户并使用Agora构建示例应用程序。
 
 ## 准备工作
@@ -53,7 +55,7 @@
 
 ## 附录
 * 开发者中心[API文档]（https://docs.agora.io/en/）
-* [报错]（https://github.com/AgoraIO-Community/Agora-Flutter-Quickstart/issues）
+* 如果发现了示例代码的bug, 欢迎提交 [issue](https://github.com/AgoraIO/Agora-Interactive-Broadcasting-Live-Streaming-Web/issues)
 * [Flutter lab：编写你的第一个Flutter应用程序]（https://flutter.io/docs/get-started/codelab）
 * [Flutter cookbook]（https://flutter.io/docs/cookbook）
 * [Flutter在线文档]（https://flutter.io/docs），提供有关移动开发的教程，示例，指南以及完整的API参考。
