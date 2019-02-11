@@ -51,7 +51,7 @@
 
 **我们建议您在开发期间按照flutter官方引导推荐，使用IDE(包括但不限于VS Code)来控制整体构建过程**
 
-有关如何设置IDE的详细信息，请参阅[此处]（https://flutter.io/docs/get-started/editor?tab=vscode）
+有关如何设置IDE的详细信息，请参阅[此处](https://flutter.io/docs/get-started/editor?tab=vscode)
 
 ## 附录
 * 开发者中心[API文档](https://docs.agora.io/en/)
