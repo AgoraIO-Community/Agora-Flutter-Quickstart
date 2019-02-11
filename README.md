@@ -14,8 +14,8 @@ This repository shows you how to use Agora Flutter SDK to build a simple video c
 - Switch camera views
 - Layout multiple video views
 
-![Screenshot-1](screenshot-1.jpeg)
-![Screenshot-2](screenshot-2.jpeg)
+![Screenshot-1](screenshot-1.png)
+![Screenshot-2](screenshot-2.png)
 
 
 ### Create an Account and Obtain an App ID
