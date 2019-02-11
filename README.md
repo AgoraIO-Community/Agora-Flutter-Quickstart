@@ -7,7 +7,12 @@ This tutorial describes how to create an Agora account and build a sample app wi
 - [Flutter](https://flutter.io/) 1.0.0
 
 ## Quick Start
-This repository shows you how to use Agora Flutter SDK to build a simple video call app.
+This repository shows you how to use Agora Flutter SDK to build a simple video call app. It demonstrates you how to:
+
+Join / leave a channel
+Mute / unmute audio
+Switch camera views
+Layout multiple video views
 
 ### Create an Account and Obtain an App ID
 To build and run the sample application, first obtain an app ID: 
