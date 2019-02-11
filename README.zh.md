@@ -2,11 +2,11 @@
 
 *Other languages： [English](README.md)*
 
-本教程介绍如何使用[Flutter]（https://flutter.io/）创建Agora帐户并使用Agora构建示例应用程序。
+本教程介绍如何使用[Flutter](https://flutter.io/)创建Agora帐户并使用Agora构建示例应用程序。
 
 ## 准备工作
  -  Agora.io [开发者帐户](https://dashboard.agora.io/signin/)
- -  [Flutter](https://flutter.io/)1.0.0
+ -  [Flutter](https://flutter.io/) 1.0.0
 
 ## 快速开始
 这个示例向您展示如何使用Agora Flutter SDK构建一个简单的视频通话应用程序。它向您展示了如何：
@@ -54,11 +54,11 @@
 有关如何设置IDE的详细信息，请参阅[此处]（https://flutter.io/docs/get-started/editor?tab=vscode）
 
 ## 附录
-* 开发者中心[API文档]（https://docs.agora.io/en/）
+* 开发者中心[API文档](https://docs.agora.io/en/)
 * 如果发现了示例代码的bug, 欢迎提交 [issue](https://github.com/AgoraIO/Agora-Interactive-Broadcasting-Live-Streaming-Web/issues)
-* [Flutter lab：编写你的第一个Flutter应用程序]（https://flutter.io/docs/get-started/codelab）
-* [Flutter cookbook]（https://flutter.io/docs/cookbook）
-* [Flutter在线文档]（https://flutter.io/docs），提供有关移动开发的教程，示例，指南以及完整的API参考。
+* [Flutter lab：编写你的第一个Flutter应用程序](https://flutter.io/docs/get-started/codelab)
+* [Flutter cookbook](https://flutter.io/docs/cookbook)
+* [Flutter在线文档](https://flutter.io/docs)，提供有关移动开发的教程，示例，指南以及完整的API参考。
 
 ## License
 MIT
