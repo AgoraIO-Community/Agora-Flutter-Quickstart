@@ -27,7 +27,7 @@
 2.在左侧的仪表板树中导航到**Projects** > **Project List**。
 3.将从仪表板获取的App ID复制到文本文件中。您将在启动应用程序时用到它。
 
-###更新并运行示例应用程序
+### 更新并运行示例应用程序
 
 打开[settings.dart](lib/src/utils/settings.dart)文件并添加App ID。
 
