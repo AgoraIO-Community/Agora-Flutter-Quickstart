@@ -3,6 +3,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import '../utils/videosession.dart';
 import '../utils/settings.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CallPage extends StatefulWidget {
   /// non-modifiable channel name of the page
@@ -49,6 +50,8 @@ class _CallPageState extends State<CallPage> {
       });
       return;
     }
+
+    await PermissionHandler().requestPermissions([PermissionGroup.camera, PermissionGroup.microphone]);
 
     _initAgoraRtcEngine();
     _addAgoraEventHandlers();
@@ -228,7 +231,7 @@ class _CallPageState extends State<CallPage> {
             ),
             shape: new CircleBorder(),
             elevation: 2.0,
-            fillColor: muted?Colors.blueAccent : Colors.white,
+            fillColor: muted ? Colors.blueAccent : Colors.white,
             padding: const EdgeInsets.all(12.0),
           ),
           RawMaterialButton(
