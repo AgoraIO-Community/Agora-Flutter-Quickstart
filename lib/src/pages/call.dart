@@ -54,7 +54,7 @@ class _CallPageState extends State<CallPage> {
     _addAgoraEventHandlers();
     // use _addRenderView everytime a native video view is needed
     _addRenderView(0, (viewId) {
-      AgoraRtcEngine.setupLocalVideo(viewId, 1);
+      AgoraRtcEngine.setupLocalVideo(viewId, VideoRenderMode.Hidden);
       AgoraRtcEngine.startPreview();
       // state can access widget directly
       AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
@@ -95,7 +95,7 @@ class _CallPageState extends State<CallPage> {
         String info = 'userJoined: ' + uid.toString();
         _infoStrings.add(info);
         _addRenderView(uid, (viewId) {
-          AgoraRtcEngine.setupRemoteVideo(viewId, 1, uid);
+          AgoraRtcEngine.setupRemoteVideo(viewId, VideoRenderMode.Hidden, uid);
         });
       });
     };
