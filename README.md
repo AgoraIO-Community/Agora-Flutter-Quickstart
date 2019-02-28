@@ -60,5 +60,8 @@ Details about how to set up the IDE please take a look at [here](https://flutter
 * [Flutter cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
 * [Flutter online documentation](https://flutter.io/docs), which offers tutorials, samples, guidance on mobile development, and a full API reference.
 
+# Credit
+https://pub.dartlang.org/packages/permission_handler
+
 ## License
 This software is under the MIT License (MIT).
