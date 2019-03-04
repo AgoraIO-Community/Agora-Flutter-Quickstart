@@ -30,7 +30,6 @@ class _CallPageState extends State<CallPage> {
       AgoraRtcEngine.removeNativeView(session.viewId);
     });
     _sessions.clear();
-    AgoraRtcEngine.destroy();
     super.dispose();
   }
 
