@@ -30,6 +30,7 @@ class _CallPageState extends State<CallPage> {
       AgoraRtcEngine.removeNativeView(session.viewId);
     });
     _sessions.clear();
+    AgoraRtcEngine.leaveChannel();
     super.dispose();
   }
 
@@ -40,7 +41,7 @@ class _CallPageState extends State<CallPage> {
     initialize();
   }
 
-  void initialize() async {
+  void initialize() {
     if (APP_ID.isEmpty) {
       setState(() {
         _infoStrings
@@ -50,7 +51,7 @@ class _CallPageState extends State<CallPage> {
       return;
     }
 
-    await PermissionHandler().requestPermissions([PermissionGroup.camera, PermissionGroup.microphone]);
+    PermissionHandler().requestPermissions([PermissionGroup.camera, PermissionGroup.microphone]);
 
     _initAgoraRtcEngine();
     _addAgoraEventHandlers();
