@@ -41,7 +41,7 @@ class _CallPageState extends State<CallPage> {
     initialize();
   }
 
-  void initialize() {
+  void initialize() async {
     if (APP_ID.isEmpty) {
       setState(() {
         _infoStrings
@@ -51,7 +51,8 @@ class _CallPageState extends State<CallPage> {
       return;
     }
 
-    PermissionHandler().requestPermissions([PermissionGroup.camera, PermissionGroup.microphone]);
+    await PermissionHandler().requestPermissions(
+        [PermissionGroup.camera, PermissionGroup.microphone]);
 
     _initAgoraRtcEngine();
     _addAgoraEventHandlers();
