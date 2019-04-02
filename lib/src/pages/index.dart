@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import './call.dart';
 
 class IndexPage extends StatefulWidget {
@@ -67,7 +68,7 @@ class IndexState extends State<IndexPage> {
         ));
   }
 
-  onJoin() {
+  onJoin() async {
     // update input validation
     setState(() {
       _channelController.text.isEmpty
@@ -75,6 +76,8 @@ class IndexState extends State<IndexPage> {
           : _validateError = false;
     });
     if (_channelController.text.isNotEmpty) {
+      // await for camera and mic permissions before pushing video page
+      await _handleCameraAndMic();
       // push video page with given channel name
       Navigator.push(
           context,
@@ -83,5 +86,10 @@ class IndexState extends State<IndexPage> {
                     channelName: _channelController.text,
                   )));
     }
+  }
+
+  _handleCameraAndMic() async {
+    await PermissionHandler().requestPermissions(
+        [PermissionGroup.camera, PermissionGroup.microphone]);
   }
 }
