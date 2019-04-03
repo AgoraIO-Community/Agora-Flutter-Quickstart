@@ -39,6 +39,13 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Use code below for production build
+        // For debug mode you need to comment above lines of code
+        // Issue with 'libflutter.so'
+        ndk {
+            abiFilters 'armeabi-v7a'
+        }
     }
 
     buildTypes {
