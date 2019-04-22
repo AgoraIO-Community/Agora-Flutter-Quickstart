@@ -44,7 +44,7 @@ android {
         // For debug mode you need to comment above lines of code
         // Issue with 'libflutter.so'
         ndk {
-            abiFilters 'armeabi-v7a'
+            abiFilters 'armeabi-v7a', 'x86'
         }
     }
 
