@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
-import '../utils/videosession.dart';
 import '../utils/settings.dart';
 
 class CallPage extends StatefulWidget {
@@ -18,18 +17,17 @@ class CallPage extends StatefulWidget {
 }
 
 class _CallPageState extends State<CallPage> {
-  static final _sessions = List<VideoSession>();
+  static final _users = List<int>();
   final _infoStrings = <String>[];
   bool muted = false;
 
   @override
   void dispose() {
-    // clean up native views & destroy sdk
-    _sessions.forEach((session) {
-      AgoraRtcEngine.removeNativeView(session.viewId);
-    });
-    _sessions.clear();
+    // clear users
+    _users.clear();
+    // destroy sdk
     AgoraRtcEngine.leaveChannel();
+    AgoraRtcEngine.destroy();
     super.dispose();
   }
 
@@ -52,13 +50,9 @@ class _CallPageState extends State<CallPage> {
 
     _initAgoraRtcEngine();
     _addAgoraEventHandlers();
-    // use _addRenderView everytime a native video view is needed
-    _addRenderView(0, (viewId) {
-      AgoraRtcEngine.setupLocalVideo(viewId, VideoRenderMode.Hidden);
-      AgoraRtcEngine.startPreview();
-      // state can access widget directly
-      AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
-    });
+    AgoraRtcEngine.enableWebSdkInteroperability(true);
+    AgoraRtcEngine.setParameters('{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}');
+    AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
   }
 
   /// Create agora sdk instance and initialze
@@ -69,7 +63,7 @@ class _CallPageState extends State<CallPage> {
 
   /// Add agora event handlers
   void _addAgoraEventHandlers() {
-    AgoraRtcEngine.onError = (int code) {
+    AgoraRtcEngine.onError = (dynamic code) {
       setState(() {
         String info = 'onError: ' + code.toString();
         _infoStrings.add(info);
@@ -87,6 +81,7 @@ class _CallPageState extends State<CallPage> {
     AgoraRtcEngine.onLeaveChannel = () {
       setState(() {
         _infoStrings.add('onLeaveChannel');
+        _users.clear();
       });
     };
 
@@ -94,9 +89,7 @@ class _CallPageState extends State<CallPage> {
       setState(() {
         String info = 'userJoined: ' + uid.toString();
         _infoStrings.add(info);
-        _addRenderView(uid, (viewId) {
-          AgoraRtcEngine.setupRemoteVideo(viewId, VideoRenderMode.Hidden, uid);
-        });
+        _users.add(uid);
       });
     };
 
@@ -104,7 +97,7 @@ class _CallPageState extends State<CallPage> {
       setState(() {
         String info = 'userOffline: ' + uid.toString();
         _infoStrings.add(info);
-        _removeRenderView(uid);
+        _users.remove(uid);
       });
     };
 
@@ -122,40 +115,13 @@ class _CallPageState extends State<CallPage> {
     };
   }
 
-  /// Create a native view and add a new video session object
-  /// The native viewId can be used to set up local/remote view
-  void _addRenderView(int uid, Function(int viewId) finished) {
-    Widget view = AgoraRtcEngine.createNativeView(uid, (viewId) {
-      setState(() {
-        _getVideoSession(uid).viewId = viewId;
-        if (finished != null) {
-          finished(viewId);
-        }
-      });
-    });
-    VideoSession session = VideoSession(uid, view);
-    _sessions.add(session);
-  }
-
-  /// Remove a native view and remove an existing video session object
-  void _removeRenderView(int uid) {
-    VideoSession session = _getVideoSession(uid);
-    if (session != null) {
-      _sessions.remove(session);
-    }
-    AgoraRtcEngine.removeNativeView(session.viewId);
-  }
-
-  /// Helper function to filter video session with uid
-  VideoSession _getVideoSession(int uid) {
-    return _sessions.firstWhere((session) {
-      return session.uid == uid;
-    });
-  }
-
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
-    return _sessions.map((session) => session.view).toList();
+    List<Widget> list = [AgoraRenderWidget(0, local: true, preview: true)];
+    _users.forEach((int uid) => {
+      list.add(AgoraRenderWidget(uid))
+    });
+    return list;
   }
 
   /// Video view wrapper
