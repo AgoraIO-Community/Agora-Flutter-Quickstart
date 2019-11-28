@@ -53,6 +53,35 @@ Once the build is complete, run the `run` command to start the app.
 
 Details about how to set up the IDE please take a look at [here](https://flutter.io/docs/get-started/editor?tab=vscode)
 
+## Reporting an issue
+Please ensure you provide following information when you report an issue,
+
+### Environment
+#### Flutter Doctor
+run `flutter doctor` and copy the log output.
+
+#### Agora SDK Logs
+```
+AgoraRtcEngine.setParameters("{\"rtc.log_filter\": 65535}");
+```
+
+to call.dart
+The eventual outcome would look like this,
+
+```
+...
+    _initAgoraRtcEngine();
+    _addAgoraEventHandlers();
+    AgoraRtcEngine.enableWebSdkInteroperability(true);
+    AgoraRtcEngine.setParameters('{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}');
+    AgoraRtcEngine.setParameters("{\"rtc.log_filter\": 65535}");
+    AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
+...
+```
+
+and then start the app. Our sdk log will print directly to console in this case.
+
+
 ## Resources
 * Complete [API documentation](https://docs.agora.io/en/) at the Developer Center
 * [File bugs about this sample](https://github.com/AgoraIO-Community/Agora-Flutter-Quickstart/issues)
