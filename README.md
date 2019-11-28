@@ -61,11 +61,12 @@ Please ensure you provide following information when you report an issue,
 run `flutter doctor` and copy the log output.
 
 #### Agora SDK Logs
+
+Insert below code
 ```
 AgoraRtcEngine.setParameters("{\"rtc.log_filter\": 65535}");
 ```
-
-to call.dart
+to `call.dart`
 The eventual outcome would look like this,
 
 ```
