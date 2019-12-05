@@ -1,19 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import './call.dart';
 
 class IndexPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return new IndexState();
-  }
+  State<StatefulWidget> createState() => IndexState();
 }
 
 class IndexState extends State<IndexPage> {
   /// create a channelController to retrieve text value
   final _channelController = TextEditingController();
 
-  /// if channel textfield is validated to have error
+  /// if channel textField is validated to have error
   bool _validateError = false;
 
   @override
@@ -26,49 +26,54 @@ class IndexState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Agora Flutter QuickStart'),
-        ),
-        body: Center(
-          child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              height: 400,
-              child: Column(
+      appBar: AppBar(
+        title: Text('Agora Flutter QuickStart'),
+      ),
+      body: Center(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          height: 400,
+          child: Column(
+            children: <Widget>[
+              Row(
                 children: <Widget>[
-                  Row(children: <Widget>[]),
-                  Row(children: <Widget>[
-                    Expanded(
-                        child: TextField(
-                      controller: _channelController,
-                      decoration: InputDecoration(
-                          errorText: _validateError
-                              ? "Channel name is mandatory"
-                              : null,
-                          border: UnderlineInputBorder(
-                              borderSide: BorderSide(width: 1)),
-                          hintText: 'Channel name'),
-                    ))
-                  ]),
-                  Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: RaisedButton(
-                              onPressed: () => onJoin(),
-                              child: Text("Join"),
-                              color: Colors.blueAccent,
-                              textColor: Colors.white,
-                            ),
-                          )
-                        ],
-                      ))
+                  Expanded(
+                      child: TextField(
+                    controller: _channelController,
+                    decoration: InputDecoration(
+                      errorText:
+                          _validateError ? 'Channel name is mandatory' : null,
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(width: 1),
+                      ),
+                      hintText: 'Channel name',
+                    ),
+                  ))
                 ],
-              )),
-        ));
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: RaisedButton(
+                        onPressed: onJoin,
+                        child: Text('Join'),
+                        color: Colors.blueAccent,
+                        textColor: Colors.white,
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
-  onJoin() async {
+  Future<void> onJoin() async {
     // update input validation
     setState(() {
       _channelController.text.isEmpty
@@ -79,17 +84,20 @@ class IndexState extends State<IndexPage> {
       // await for camera and mic permissions before pushing video page
       await _handleCameraAndMic();
       // push video page with given channel name
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => new CallPage(
-                    channelName: _channelController.text,
-                  )));
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CallPage(
+            channelName: _channelController.text,
+          ),
+        ),
+      );
     }
   }
 
-  _handleCameraAndMic() async {
+  Future<void> _handleCameraAndMic() async {
     await PermissionHandler().requestPermissions(
-        [PermissionGroup.camera, PermissionGroup.microphone]);
+      [PermissionGroup.camera, PermissionGroup.microphone],
+    );
   }
 }
