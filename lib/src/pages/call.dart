@@ -11,13 +11,11 @@ class CallPage extends StatefulWidget {
   const CallPage({Key key, this.channelName}) : super(key: key);
 
   @override
-  _CallPageState createState() {
-    return new _CallPageState();
-  }
+  _CallPageState createState() => _CallPageState();
 }
 
 class _CallPageState extends State<CallPage> {
-  static final _users = List<int>();
+  static final _users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
 
@@ -38,42 +36,47 @@ class _CallPageState extends State<CallPage> {
     initialize();
   }
 
-  void initialize() {
+  Future<void> initialize() async {
     if (APP_ID.isEmpty) {
       setState(() {
-        _infoStrings
-            .add("APP_ID missing, please provide your APP_ID in settings.dart");
-        _infoStrings.add("Agora Engine is not starting");
+        _infoStrings.add(
+          'APP_ID missing, please provide your APP_ID in settings.dart',
+        );
+        _infoStrings.add('Agora Engine is not starting');
       });
       return;
     }
 
-    _initAgoraRtcEngine();
+    await _initAgoraRtcEngine();
     _addAgoraEventHandlers();
-    AgoraRtcEngine.enableWebSdkInteroperability(true);
-    AgoraRtcEngine.setParameters('{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}');
-    AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
+    await AgoraRtcEngine.enableWebSdkInteroperability(true);
+    await AgoraRtcEngine.setParameters('''
+{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}''');
+    await AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
   }
 
-  /// Create agora sdk instance and initialze
+  /// Create agora sdk instance and initialize
   Future<void> _initAgoraRtcEngine() async {
-    AgoraRtcEngine.create(APP_ID);
-    AgoraRtcEngine.enableVideo();
+    await AgoraRtcEngine.create(APP_ID);
+    await AgoraRtcEngine.enableVideo();
   }
 
   /// Add agora event handlers
   void _addAgoraEventHandlers() {
     AgoraRtcEngine.onError = (dynamic code) {
       setState(() {
-        String info = 'onError: ' + code.toString();
+        final info = 'onError: $code';
         _infoStrings.add(info);
       });
     };
 
-    AgoraRtcEngine.onJoinChannelSuccess =
-        (String channel, int uid, int elapsed) {
+    AgoraRtcEngine.onJoinChannelSuccess = (
+      String channel,
+      int uid,
+      int elapsed,
+    ) {
       setState(() {
-        String info = 'onJoinChannel: ' + channel + ', uid: ' + uid.toString();
+        final info = 'onJoinChannel: $channel, uid: $uid';
         _infoStrings.add(info);
       });
     };
@@ -87,7 +90,7 @@ class _CallPageState extends State<CallPage> {
 
     AgoraRtcEngine.onUserJoined = (int uid, int elapsed) {
       setState(() {
-        String info = 'userJoined: ' + uid.toString();
+        final info = 'userJoined: $uid';
         _infoStrings.add(info);
         _users.add(uid);
       });
@@ -95,21 +98,20 @@ class _CallPageState extends State<CallPage> {
 
     AgoraRtcEngine.onUserOffline = (int uid, int reason) {
       setState(() {
-        String info = 'userOffline: ' + uid.toString();
+        final info = 'userOffline: $uid';
         _infoStrings.add(info);
         _users.remove(uid);
       });
     };
 
-    AgoraRtcEngine.onFirstRemoteVideoFrame =
-        (int uid, int width, int height, int elapsed) {
+    AgoraRtcEngine.onFirstRemoteVideoFrame = (
+      int uid,
+      int width,
+      int height,
+      int elapsed,
+    ) {
       setState(() {
-        String info = 'firstRemoteVideo: ' +
-            uid.toString() +
-            ' ' +
-            width.toString() +
-            'x' +
-            height.toString();
+        final info = 'firstRemoteVideo: $uid ${width}x $height';
         _infoStrings.add(info);
       });
     };
@@ -117,10 +119,10 @@ class _CallPageState extends State<CallPage> {
 
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
-    List<Widget> list = [AgoraRenderWidget(0, local: true, preview: true)];
-    _users.forEach((int uid) => {
-      list.add(AgoraRenderWidget(uid))
-    });
+    final list = [
+      AgoraRenderWidget(0, local: true, preview: true),
+    ];
+    _users.forEach((int uid) => list.add(AgoraRenderWidget(uid)));
     return list;
   }
 
@@ -131,17 +133,17 @@ class _CallPageState extends State<CallPage> {
 
   /// Video view row wrapper
   Widget _expandedVideoRow(List<Widget> views) {
-    List<Widget> wrappedViews =
-        views.map((Widget view) => _videoView(view)).toList();
+    final wrappedViews = views.map<Widget>(_videoView).toList();
     return Expanded(
-        child: Row(
-      children: wrappedViews,
-    ));
+      child: Row(
+        children: wrappedViews,
+      ),
+    );
   }
 
   /// Video layout wrapper
   Widget _viewRows() {
-    List<Widget> views = _getRenderViews();
+    final views = _getRenderViews();
     switch (views.length) {
       case 1:
         return Container(
@@ -181,42 +183,42 @@ class _CallPageState extends State<CallPage> {
   Widget _toolbar() {
     return Container(
       alignment: Alignment.bottomCenter,
-      padding: EdgeInsets.symmetric(vertical: 48),
+      padding: const EdgeInsets.symmetric(vertical: 48),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           RawMaterialButton(
-            onPressed: () => _onToggleMute(),
-            child: new Icon(
+            onPressed: _onToggleMute,
+            child: Icon(
               muted ? Icons.mic : Icons.mic_off,
               color: muted ? Colors.white : Colors.blueAccent,
               size: 20.0,
             ),
-            shape: new CircleBorder(),
+            shape: CircleBorder(),
             elevation: 2.0,
             fillColor: muted ? Colors.blueAccent : Colors.white,
             padding: const EdgeInsets.all(12.0),
           ),
           RawMaterialButton(
             onPressed: () => _onCallEnd(context),
-            child: new Icon(
+            child: Icon(
               Icons.call_end,
               color: Colors.white,
               size: 35.0,
             ),
-            shape: new CircleBorder(),
+            shape: CircleBorder(),
             elevation: 2.0,
             fillColor: Colors.redAccent,
             padding: const EdgeInsets.all(15.0),
           ),
           RawMaterialButton(
-            onPressed: () => _onSwitchCamera(),
-            child: new Icon(
+            onPressed: _onSwitchCamera,
+            child: Icon(
               Icons.switch_camera,
               color: Colors.blueAccent,
               size: 20.0,
             ),
-            shape: new CircleBorder(),
+            shape: CircleBorder(),
             elevation: 2.0,
             fillColor: Colors.white,
             padding: const EdgeInsets.all(12.0),
@@ -229,36 +231,51 @@ class _CallPageState extends State<CallPage> {
   /// Info panel to show logs
   Widget _panel() {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 48),
-        alignment: Alignment.bottomCenter,
-        child: FractionallySizedBox(
-          heightFactor: 0.5,
-          child: Container(
-              padding: EdgeInsets.symmetric(vertical: 48),
-              child: ListView.builder(
-                  reverse: true,
-                  itemCount: _infoStrings.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (_infoStrings.length == 0) {
-                      return null;
-                    }
-                    return Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                        child: Row(mainAxisSize: MainAxisSize.min, children: [
-                          Flexible(
-                              child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 2, horizontal: 5),
-                                  decoration: BoxDecoration(
-                                      color: Colors.yellowAccent,
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Text(_infoStrings[index],
-                                      style:
-                                          TextStyle(color: Colors.blueGrey))))
-                        ]));
-                  })),
-        ));
+      padding: const EdgeInsets.symmetric(vertical: 48),
+      alignment: Alignment.bottomCenter,
+      child: FractionallySizedBox(
+        heightFactor: 0.5,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 48),
+          child: ListView.builder(
+            reverse: true,
+            itemCount: _infoStrings.length,
+            itemBuilder: (BuildContext context, int index) {
+              if (_infoStrings.isEmpty) {
+                return null;
+              }
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 3,
+                  horizontal: 10,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 2,
+                          horizontal: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.yellowAccent,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text(
+                          _infoStrings[index],
+                          style: TextStyle(color: Colors.blueGrey),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   void _onCallEnd(BuildContext context) {
@@ -279,13 +296,19 @@ class _CallPageState extends State<CallPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Agora Flutter QuickStart'),
+      appBar: AppBar(
+        title: Text('Agora Flutter QuickStart'),
+      ),
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Stack(
+          children: <Widget>[
+            _viewRows(),
+            _panel(),
+            _toolbar(),
+          ],
         ),
-        backgroundColor: Colors.black,
-        body: Center(
-            child: Stack(
-          children: <Widget>[_viewRows(), _panel(), _toolbar()],
-        )));
+      ),
+    );
   }
 }

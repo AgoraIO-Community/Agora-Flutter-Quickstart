@@ -1,0 +1,89 @@
+# Specify analysis options.
+#
+# For a list of lints, see: http://dart-lang.github.io/linter/lints/
+# See the configuration guide for more
+# https://github.com/dart-lang/sdk/tree/master/pkg/analyzer#configuring-the-analyzer
+#
+# There are four similar analysis options files in the flutter repos:
+#   - analysis_options.yaml
+#   - packages/flutter/lib/analysis_options_user.yaml (this file)
+#   - https://github.com/flutter/plugins/blob/master/analysis_options.yaml
+#   - https://github.com/flutter/engine/blob/master/analysis_options.yaml
+#
+analyzer:
+  errors:
+    # treat missing required parameters as a warning (not a hint)
+    missing_required_param: warning
+    # treat missing returns as a warning (not a hint)
+    missing_return: warning
+
+linter:
+  rules:
+    - always_declare_return_types
+    - avoid_double_and_int_checks
+    - avoid_empty_else
+    - avoid_slow_async_io
+    - avoid_print
+    - avoid_init_to_null
+    - avoid_relative_lib_imports
+    - avoid_return_types_on_setters
+    - avoid_returning_null_for_future
+    - avoid_types_as_parameter_names
+    - await_only_futures
+    - camel_case_types
+    - cancel_subscriptions
+    - close_sinks
+    - control_flow_in_finally
+    - empty_constructor_bodies
+    - empty_statements
+    - file_names
+    - hash_and_equals
+    - implementation_imports
+    - library_names
+    - lines_longer_than_80_chars
+    - non_constant_identifier_names
+    - null_closures
+    - overridden_fields
+    - package_api_docs
+    - package_names
+    - package_prefixed_library_names
+    - parameter_assignments
+    - prefer_adjacent_string_concatenation
+    - prefer_asserts_in_initializer_lists
+    - prefer_collection_literals
+    - prefer_const_constructors_in_immutables
+    - prefer_contains
+    - prefer_constructors_over_static_methods
+    - prefer_conditional_assignment
+    - prefer_final_fields
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_foreach
+    - prefer_is_not_empty
+    - prefer_is_empty
+    - prefer_if_null_operators
+    - prefer_interpolation_to_compose_strings
+    - prefer_iterable_whereType
+    - prefer_spread_collections
+    - prefer_single_quotes
+    - slash_for_doc_comments
+    - test_types_in_equals
+    - throw_in_finally
+    - type_init_formals
+    - unawaited_futures
+    - unnecessary_await_in_return
+    - unnecessary_brace_in_string_interps
+    - unnecessary_const
+    - unnecessary_getters_setters
+    - unnecessary_new
+    - unnecessary_statements
+    - unnecessary_this
+    - unnecessary_overrides
+    - unnecessary_parenthesis
+    - unnecessary_lambdas
+    - unrelated_type_equality_checks
+    - use_to_and_as_if_applicable
+    - use_function_type_syntax_for_parameters
+    - use_full_hex_values_for_flutter_colors
+    - valid_regexps
+    - void_checks
