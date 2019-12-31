@@ -19,7 +19,6 @@ This repository shows you how to use Agora Flutter SDK to build a simple video c
 ![Screenshot-1](screenshot-1.png)
 ![Screenshot-2](screenshot-2.png)
 
-
 ### Create an Account and Obtain an App ID
 To build and run the sample application, first obtain an app ID: 
 
@@ -53,6 +52,28 @@ Once the build is complete, run the `run` command to start the app.
 
 Details about how to set up the IDE please take a look at [here](https://flutter.io/docs/get-started/editor?tab=vscode)
 
+## Error handling
+
+### Black screen
+
+if your MainActivity extends `io.flutter.embedding.android.FlutterActivity`
+
+please remove this line
+```
+GeneratedPluginRegistrant.registerWith(this)
+```
+
+[you can refer to official documents](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
+
+### Release crash
+
+it causes by code obfuscation because of flutter set `android.enableR8=true` by the default
+
+Add the following line in the **app/proguard-rules.pro** file to prevent code obfuscation:
+```
+-keep class io.agora.**{*;}
+```
+
 ## Reporting an issue
 Please ensure you provide following information when you report an issue,
 
@@ -81,7 +102,6 @@ The eventual outcome would look like this,
 ```
 
 and then start the app. Our sdk log will print directly to console in this case.
-
 
 ## Resources
 * Complete [API documentation](https://docs.agora.io/en/) at the Developer Center
