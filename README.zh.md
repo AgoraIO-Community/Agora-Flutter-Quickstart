@@ -19,7 +19,6 @@
 ![screenshot-1](screenshot-1.png)
 ![screenshot-2](screenshot-2.png)
 
-
 ### 创建一个帐户并获取一个App ID
 要构建和运行示例应用程序，请首先获取Agora App ID：
 
@@ -52,6 +51,28 @@
 **我们建议您在开发期间按照flutter官方引导推荐，使用IDE(包括但不限于VS Code)来控制整体构建过程**
 
 有关如何设置IDE的详细信息，请参阅[此处](https://flutter.io/docs/get-started/editor?tab=vscode)
+
+## 错误处理
+
+### 黑屏
+
+如果你的MainActivity继承`io.flutter.embedding.android.FlutterActivity`
+
+请移除这行代码
+```
+GeneratedPluginRegistrant.registerWith(this)
+```
+
+[你可以参考官方文档](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
+
+### Release模式闪退
+
+这个是代码混淆导致的，因为flutter默认设置了`android.enableR8=true`
+
+在你的**app/proguard-rules.pro**文件中添加下面这行代码，以避免代码混淆：
+```
+-keep class io.agora.**{*;}
+```
 
 ## 附录
 * 开发者中心[API文档](https://docs.agora.io/en/)
