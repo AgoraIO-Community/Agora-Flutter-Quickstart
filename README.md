@@ -1,14 +1,16 @@
 # Agora Flutter Quickstart
 
-*其他语言版本： [简体中文](README.zh.md)*
+_其他语言版本： [简体中文](README.zh.md)_
 
 This tutorial describes how to create an Agora account and build a sample app with Agora using [Flutter](https://flutter.io/).
 
 ## Prerequisites
+
 - Agora.io [Developer Account](https://dashboard.agora.io/signin/)
 - [Flutter](https://flutter.io/) 1.0.0
 
 ## Quick Start
+
 This repository shows you how to use Agora Flutter SDK to build a simple video call app. It demonstrates you how to:
 
 - Join / leave a channel
@@ -20,7 +22,8 @@ This repository shows you how to use Agora Flutter SDK to build a simple video c
 ![Screenshot-2](screenshot-2.png)
 
 ### Create an Account and Obtain an App ID
-To build and run the sample application, first obtain an app ID: 
+
+To build and run the sample application, first obtain an app ID:
 
 1. Create a developer account at [agora.io](https://dashboard.agora.io/signin/). Once you finish the sign-up process, you are redirected to the dashboard.
 2. Navigate in the dashboard tree on the left to **Projects** > **Project List**.
@@ -36,7 +39,7 @@ Open the [settings.dart](lib/src/utils/settings.dart) file and add the app ID.
 
 Run the `packages get` command in your project directory:
 
-```bash  
+```bash
   # install dependencies
   flutter packages get
 ```
@@ -48,7 +51,7 @@ Once the build is complete, run the `run` command to start the app.
   flutter run
 ```
 
-**We recommend you to use IDE to control overall build process during development**
+#### We recommend you to use IDE to control overall build process during development
 
 Details about how to set up the IDE please take a look at [here](https://flutter.io/docs/get-started/editor?tab=vscode)
 
@@ -58,9 +61,16 @@ Details about how to set up the IDE please take a look at [here](https://flutter
 
 if your MainActivity extends `io.flutter.embedding.android.FlutterActivity`
 
-please remove this line
+please remove this line of code (Android Embedding V1)
+
+```java
+GeneratedPluginRegistrant.registerWith(this);
 ```
-GeneratedPluginRegistrant.registerWith(this)
+
+or this line (Android Embedding V2)
+
+```java
+GeneratedPluginRegistrant.registerWith(flutterEngine);
 ```
 
 [you can refer to official documents](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
@@ -70,27 +80,33 @@ GeneratedPluginRegistrant.registerWith(this)
 it causes by code obfuscation because of flutter set `android.enableR8=true` by the default
 
 Add the following line in the **app/proguard-rules.pro** file to prevent code obfuscation:
-```
+
+```proguard
 -keep class io.agora.**{*;}
 ```
 
 ## Reporting an issue
+
 Please ensure you provide following information when you report an issue,
 
 ### Environment
+
 #### Flutter Doctor
+
 run `flutter doctor` and copy the log output.
 
 #### Agora SDK Logs
 
 Insert below code
-```
+
+```dart
 AgoraRtcEngine.setParameters("{\"rtc.log_filter\": 65535}");
 ```
+
 to `call.dart`
 The eventual outcome would look like this,
 
-```
+```dart
 ...
     _initAgoraRtcEngine();
     _addAgoraEventHandlers();
@@ -104,14 +120,17 @@ The eventual outcome would look like this,
 and then start the app. Our sdk log will print directly to console in this case.
 
 ## Resources
-* Complete [API documentation](https://docs.agora.io/en/) at the Developer Center
-* [File bugs about this sample](https://github.com/AgoraIO-Community/Agora-Flutter-Quickstart/issues)
-* [Flutter lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-* [Flutter cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-* [Flutter online documentation](https://flutter.io/docs), which offers tutorials, samples, guidance on mobile development, and a full API reference.
+
+- Complete [API documentation](https://docs.agora.io/en/) at the Developer Center
+- [File bugs about this sample](https://github.com/AgoraIO-Community/Agora-Flutter-Quickstart/issues)
+- [Flutter lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
+- [Flutter cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+- [Flutter online documentation](https://flutter.io/docs), which offers tutorials, samples, guidance on mobile development, and a full API reference.
 
 ## Credit
+
 https://pub.dartlang.org/packages/permission_handler
 
 ## License
+
 This software is under the MIT License (MIT).
