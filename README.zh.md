@@ -63,7 +63,7 @@ _Other languages： [English](README.md)_
 
 [你可以参考这条 pull request](https://github.com/flutter/engine/pull/14326)
 
-### 黑屏
+### Android 黑屏
 
 如果你的 MainActivity 继承`io.flutter.embedding.android.FlutterActivity`
 
@@ -81,7 +81,7 @@ GeneratedPluginRegistrant.registerWith(flutterEngine);
 
 [你可以参考官方文档](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
 
-### Release 模式闪退
+### Android Release 模式闪退
 
 这个是代码混淆导致的，因为 flutter 默认设置了`android.enableR8=true`
 
