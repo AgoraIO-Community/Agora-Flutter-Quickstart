@@ -57,6 +57,12 @@ Details about how to set up the IDE please take a look at [here](https://flutter
 
 ## Error handling
 
+### iOS memory leak
+
+if your flutter channel is stable, `PlatformView` will cause memory leak, you can run `flutter channel beta`
+
+[you can refer to this pull request](https://github.com/flutter/engine/pull/14326)
+
 ### Black screen
 
 if your MainActivity extends `io.flutter.embedding.android.FlutterActivity`

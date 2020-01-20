@@ -57,6 +57,12 @@ _Other languages： [English](README.md)_
 
 ## 错误处理
 
+### iOS 内存泄漏
+
+如果你的 flutter channel 是 stable, `PlatformView` 会导致内存泄漏, 你可以运行 `flutter channel beta`
+
+[你可以参考这条 pull request](https://github.com/flutter/engine/pull/14326)
+
 ### 黑屏
 
 如果你的 MainActivity 继承`io.flutter.embedding.android.FlutterActivity`
