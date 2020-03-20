@@ -125,6 +125,8 @@ The eventual outcome would look like this,
 
 and then start the app. Our sdk log will print directly to console in this case.
 
+## FAQ
+
 ## Resources
 
 - Complete [API documentation](https://docs.agora.io/en/) at the Developer Center
