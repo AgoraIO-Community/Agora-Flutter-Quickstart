@@ -65,19 +65,13 @@ _Other languages： [English](README.md)_
 
 ### Android 黑屏
 
-如果你的 MainActivity 继承`io.flutter.embedding.android.FlutterActivity`
+`提示：请确保你所有的配置都正确，但是仍然是黑屏`
 
-请移除这行代码（Android Embedding V1）
+如果你的 MainActivity 继承 `io.flutter.embedding.android.FlutterActivity`，并且你重写了 `configureFlutterEngine` 方法
 
-```java
-GeneratedPluginRegistrant.registerWith(this)
-```
+请不要忘记添加 `super.configureFlutterEngine(flutterEngine)`
 
-或這條線（Android Embedding V2）
-
-```java
-GeneratedPluginRegistrant.registerWith(flutterEngine);
-```
+请不要添加 `GeneratedPluginRegistrant.registerWith(flutterEngine)`, 插件现在会自动注册
 
 [你可以参考官方文档](https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration)
 
