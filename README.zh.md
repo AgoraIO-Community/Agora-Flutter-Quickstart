@@ -65,6 +65,8 @@ _Other languages： [English](README.md)_
 
 ### Android 黑屏
 
+`提示：请确保你所有的配置都正确，但是仍然是黑屏`
+
 如果你的 MainActivity 继承 `io.flutter.embedding.android.FlutterActivity`，并且你重写了 `configureFlutterEngine` 方法
 
 请不要忘记添加 `super.configureFlutterEngine(flutterEngine)`
