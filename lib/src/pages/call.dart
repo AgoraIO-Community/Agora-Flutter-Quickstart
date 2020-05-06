@@ -52,13 +52,15 @@ class _CallPageState extends State<CallPage> {
     await AgoraRtcEngine.enableWebSdkInteroperability(true);
     await AgoraRtcEngine.setParameters(
         '''{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}''');
-    await AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
+    await AgoraRtcEngine.joinChannel(null, widget.channelName, null, 1);
   }
 
   /// Create agora sdk instance and initialize
   Future<void> _initAgoraRtcEngine() async {
     await AgoraRtcEngine.create(APP_ID);
     await AgoraRtcEngine.enableVideo();
+    await AgoraRtcEngine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await AgoraRtcEngine.setClientRole(ClientRole.Broadcaster);
   }
 
   /// Add agora event handlers
@@ -122,7 +124,6 @@ class _CallPageState extends State<CallPage> {
     final List<AgoraRenderWidget> list = [
       AgoraRenderWidget(0, local: true, preview: true),
     ];
-    _users.forEach((int uid) => list.add(AgoraRenderWidget(uid)));
     return list;
   }
 

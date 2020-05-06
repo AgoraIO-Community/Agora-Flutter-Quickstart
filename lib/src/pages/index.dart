@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:agora_flutter_quickstart/src/pages/viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import './call.dart';
@@ -58,7 +59,15 @@ class IndexState extends State<IndexPage> {
                     Expanded(
                       child: RaisedButton(
                         onPressed: onJoin,
-                        child: Text('Join'),
+                        child: Text('Join Live Stream'),
+                        color: Colors.blueAccent,
+                        textColor: Colors.white,
+                      ),
+                    ),
+                    Expanded(
+                      child: RaisedButton(
+                        onPressed: onStart,
+                        child: Text('Start Live Stream'),
                         color: Colors.blueAccent,
                         textColor: Colors.white,
                       ),
@@ -71,6 +80,28 @@ class IndexState extends State<IndexPage> {
         ),
       ),
     );
+  }
+
+  Future<void> onStart() async {
+    // update input validation
+    setState(() {
+      _channelController.text.isEmpty
+          ? _validateError = true
+          : _validateError = false;
+    });
+    if (_channelController.text.isNotEmpty) {
+      // await for camera and mic permissions before pushing video page
+      await _handleCameraAndMic();
+      // push video page with given channel name
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CallPage(
+            channelName: _channelController.text,
+          ),
+        ),
+      );
+    }
   }
 
   Future<void> onJoin() async {
@@ -87,7 +118,7 @@ class IndexState extends State<IndexPage> {
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CallPage(
+          builder: (context) => ViewerPage(
             channelName: _channelController.text,
           ),
         ),
