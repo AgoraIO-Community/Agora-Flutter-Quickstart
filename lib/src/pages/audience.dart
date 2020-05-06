@@ -3,18 +3,18 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import '../utils/settings.dart';
 
-class CallPage extends StatefulWidget {
+class AudiencePage extends StatefulWidget {
   /// non-modifiable channel name of the page
   final String channelName;
 
   /// Creates a call page with given channel name.
-  const CallPage({Key key, this.channelName}) : super(key: key);
+  const AudiencePage({Key key, this.channelName}) : super(key: key);
 
   @override
-  _CallPageState createState() => _CallPageState();
+  _AudiencePageState createState() => _AudiencePageState();
 }
 
-class _CallPageState extends State<CallPage> {
+class _AudiencePageState extends State<AudiencePage> {
   static final _users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
@@ -54,7 +54,7 @@ class _CallPageState extends State<CallPage> {
     await AgoraRtcEngine.enableWebSdkInteroperability(true);
     await AgoraRtcEngine.setParameters(
         '''{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}''');
-    await AgoraRtcEngine.joinChannel(null, widget.channelName, null, 1);
+    await AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
   }
 
   /// Create agora sdk instance and initialize
@@ -122,8 +122,8 @@ class _CallPageState extends State<CallPage> {
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
     final List<AgoraRenderWidget> list = [
-      AgoraRenderWidget(0, local: true, preview: true),
     ];
+    _users.forEach((int uid) => list.add(AgoraRenderWidget(uid)));
     return list;
   }
 
@@ -304,7 +304,7 @@ class _CallPageState extends State<CallPage> {
       body: Center(
         child: Stack(
           children: <Widget>[
-            _viewRows(),
+            _users.isNotEmpty ? _viewRows(): Center(child: Text("No one"),),
             _panel(),
             _toolbar(),
           ],

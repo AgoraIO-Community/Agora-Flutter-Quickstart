@@ -1,3 +1,4 @@
+import 'package:agora_flutter_quickstart/src/pages/indexbroad.dart';
 import 'package:flutter/material.dart';
 import './src/pages/index.dart';
 
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: IndexPage(),
+      home: IndexBroadcast(),
     );
   }
 }
