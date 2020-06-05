@@ -1,14 +1,19 @@
 import 'dart:async';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
+
 import '../utils/settings.dart';
 
 class CallPage extends StatefulWidget {
   /// non-modifiable channel name of the page
   final String channelName;
 
+  /// non-modifiable client role of the page
+  final ClientRole role;
+
   /// Creates a call page with given channel name.
-  const CallPage({Key key, this.channelName}) : super(key: key);
+  const CallPage({Key key, this.channelName, this.role}) : super(key: key);
 
   @override
   _CallPageState createState() => _CallPageState();
@@ -50,8 +55,9 @@ class _CallPageState extends State<CallPage> {
     await _initAgoraRtcEngine();
     _addAgoraEventHandlers();
     await AgoraRtcEngine.enableWebSdkInteroperability(true);
-    await AgoraRtcEngine.setParameters(
-        '''{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}''');
+    VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
+    configuration.dimensions = Size(1920, 1080);
+    await AgoraRtcEngine.setVideoEncoderConfiguration(configuration);
     await AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
   }
 
@@ -59,6 +65,8 @@ class _CallPageState extends State<CallPage> {
   Future<void> _initAgoraRtcEngine() async {
     await AgoraRtcEngine.create(APP_ID);
     await AgoraRtcEngine.enableVideo();
+    await AgoraRtcEngine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await AgoraRtcEngine.setClientRole(widget.role);
   }
 
   /// Add agora event handlers
@@ -119,9 +127,10 @@ class _CallPageState extends State<CallPage> {
 
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
-    final List<AgoraRenderWidget> list = [
-      AgoraRenderWidget(0, local: true, preview: true),
-    ];
+    final List<AgoraRenderWidget> list = [];
+    if (widget.role == ClientRole.Broadcaster) {
+      list.add(AgoraRenderWidget(0, local: true, preview: true));
+    }
     _users.forEach((int uid) => list.add(AgoraRenderWidget(uid)));
     return list;
   }
@@ -181,6 +190,7 @@ class _CallPageState extends State<CallPage> {
 
   /// Toolbar layout
   Widget _toolbar() {
+    if (widget.role == ClientRole.Audience) return Container();
     return Container(
       alignment: Alignment.bottomCenter,
       padding: const EdgeInsets.symmetric(vertical: 48),
