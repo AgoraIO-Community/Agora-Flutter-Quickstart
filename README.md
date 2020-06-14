@@ -41,7 +41,7 @@ Run the `packages get` command in your project directory:
 
 ```bash
   # install dependencies
-  flutter packages get
+  flutter pub get
 ```
 
 Once the build is complete, run the `run` command to start the app.
