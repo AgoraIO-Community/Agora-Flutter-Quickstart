@@ -20,7 +20,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   agora_rtc_engine: 1.0.5
-  permission_handler: ^3.0.0
+  permission_handler: ^5.0.1
 
 dev_dependencies:
   flutter_test:
