@@ -1,6 +1,8 @@
 import 'dart:async';
 
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
+import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
 
 import '../utils/settings.dart';
@@ -20,17 +22,18 @@ class CallPage extends StatefulWidget {
 }
 
 class _CallPageState extends State<CallPage> {
-  static final _users = <int>[];
+  final _users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
+  RtcEngine _engine;
 
   @override
   void dispose() {
     // clear users
     _users.clear();
     // destroy sdk
-    AgoraRtcEngine.leaveChannel();
-    AgoraRtcEngine.destroy();
+    _engine.leaveChannel();
+    _engine.destroy();
     super.dispose();
   }
 
@@ -54,84 +57,65 @@ class _CallPageState extends State<CallPage> {
 
     await _initAgoraRtcEngine();
     _addAgoraEventHandlers();
-    await AgoraRtcEngine.enableWebSdkInteroperability(true);
+    await _engine.enableWebSdkInteroperability(true);
     VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
-    configuration.dimensions = Size(1920, 1080);
-    await AgoraRtcEngine.setVideoEncoderConfiguration(configuration);
-    await AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
+    configuration.dimensions = VideoDimensions(1920, 1080);
+    await _engine.setVideoEncoderConfiguration(configuration);
+    await _engine.joinChannel(Token, widget.channelName, null, 0);
   }
 
   /// Create agora sdk instance and initialize
   Future<void> _initAgoraRtcEngine() async {
-    await AgoraRtcEngine.create(APP_ID);
-    await AgoraRtcEngine.enableVideo();
-    await AgoraRtcEngine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await AgoraRtcEngine.setClientRole(widget.role);
+    _engine = await RtcEngine.create(APP_ID);
+    await _engine.enableVideo();
+    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setClientRole(widget.role);
   }
 
   /// Add agora event handlers
   void _addAgoraEventHandlers() {
-    AgoraRtcEngine.onError = (dynamic code) {
+    _engine.setEventHandler(RtcEngineEventHandler(error: (code) {
       setState(() {
         final info = 'onError: $code';
         _infoStrings.add(info);
       });
-    };
-
-    AgoraRtcEngine.onJoinChannelSuccess = (
-      String channel,
-      int uid,
-      int elapsed,
-    ) {
+    }, joinChannelSuccess: (channel, uid, elapsed) {
       setState(() {
         final info = 'onJoinChannel: $channel, uid: $uid';
         _infoStrings.add(info);
       });
-    };
-
-    AgoraRtcEngine.onLeaveChannel = () {
+    }, leaveChannel: (stats) {
       setState(() {
         _infoStrings.add('onLeaveChannel');
         _users.clear();
       });
-    };
-
-    AgoraRtcEngine.onUserJoined = (int uid, int elapsed) {
+    }, userJoined: (uid, elapsed) {
       setState(() {
         final info = 'userJoined: $uid';
         _infoStrings.add(info);
         _users.add(uid);
       });
-    };
-
-    AgoraRtcEngine.onUserOffline = (int uid, int reason) {
+    }, userOffline: (uid, elapsed) {
       setState(() {
         final info = 'userOffline: $uid';
         _infoStrings.add(info);
         _users.remove(uid);
       });
-    };
-
-    AgoraRtcEngine.onFirstRemoteVideoFrame = (
-      int uid,
-      int width,
-      int height,
-      int elapsed,
-    ) {
+    }, firstRemoteVideoFrame: (uid, width, height, elapsed) {
       setState(() {
         final info = 'firstRemoteVideo: $uid ${width}x $height';
         _infoStrings.add(info);
       });
-    };
+    }));
   }
 
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
-    final List<AgoraRenderWidget> list = [];
+    final List<StatefulWidget> list = [];
     if (widget.role == ClientRole.Broadcaster) {
-      list.add(AgoraRenderWidget(0, local: true, preview: true));
+      list.add(RtcLocalView.SurfaceView());
     }
-    _users.forEach((int uid) => list.add(AgoraRenderWidget(uid)));
+    _users.forEach((int uid) => list.add(RtcRemoteView.SurfaceView(uid: uid)));
     return list;
   }
 
@@ -296,11 +280,11 @@ class _CallPageState extends State<CallPage> {
     setState(() {
       muted = !muted;
     });
-    AgoraRtcEngine.muteLocalAudioStream(muted);
+    _engine.muteLocalAudioStream(muted);
   }
 
   void _onSwitchCamera() {
-    AgoraRtcEngine.switchCamera();
+    _engine.switchCamera();
   }
 
   @override
