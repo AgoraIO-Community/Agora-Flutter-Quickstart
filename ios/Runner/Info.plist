@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>Privacy - Microphone Usage Description</key>
+	<string>Microphone usage</string>
+	<key>Privacy - Camera Usage Description</key>
+	<string>Camera Usage</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>The app tries to use your microphone</string>
 	<key>NSCameraUsageDescription</key>
