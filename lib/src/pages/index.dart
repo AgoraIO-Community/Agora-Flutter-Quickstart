@@ -18,7 +18,7 @@ class IndexState extends State<IndexPage> {
   /// if channel textField is validated to have error
   bool _validateError = false;
 
-  ClientRole _role = ClientRole.Broadcaster;
+  ClientRole? _role = ClientRole.Broadcaster;
 
   @override
   void dispose() {
@@ -62,7 +62,7 @@ class IndexState extends State<IndexPage> {
                     leading: Radio(
                       value: ClientRole.Broadcaster,
                       groupValue: _role,
-                      onChanged: (ClientRole value) {
+                      onChanged: (ClientRole? value) {
                         setState(() {
                           _role = value;
                         });
@@ -74,7 +74,7 @@ class IndexState extends State<IndexPage> {
                     leading: Radio(
                       value: ClientRole.Audience,
                       groupValue: _role,
-                      onChanged: (ClientRole value) {
+                      onChanged: (ClientRole? value) {
                         setState(() {
                           _role = value;
                         });
@@ -88,13 +88,23 @@ class IndexState extends State<IndexPage> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: RaisedButton(
-                        onPressed: onJoin,
+                        child: ElevatedButton(
+                        onPressed: onJoin, 
                         child: Text('Join'),
-                        color: Colors.blueAccent,
-                        textColor: Colors.white,
-                      ),
-                    )
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
+                          foregroundColor: MaterialStateProperty.all(Colors.white) 
+                        ),
+                        ),
+                    ),
+                    // Expanded(
+                    //   child: RaisedButton(
+                    //     onPressed: onJoin,
+                    //     child: Text('Join'),
+                    //     color: Colors.blueAccent,
+                    //     textColor: Colors.white,
+                    //   ),
+                    // )
                   ],
                 ),
               )
