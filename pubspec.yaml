@@ -10,7 +10,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -18,9 +18,9 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
-  agora_rtc_engine: ^3.3.3
-  permission_handler: ^5.0.1
+  cupertino_icons: ^1.0.3
+  agora_rtc_engine: ^4.0.2
+  permission_handler: ^8.1.1
 
 dev_dependencies:
   flutter_test:
