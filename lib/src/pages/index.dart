@@ -42,17 +42,18 @@ class IndexState extends State<IndexPage> {
               Row(
                 children: <Widget>[
                   Expanded(
-                      child: TextField(
-                    controller: _channelController,
-                    decoration: InputDecoration(
-                      errorText:
-                          _validateError ? 'Channel name is mandatory' : null,
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(width: 1),
+                    child: TextField(
+                      controller: _channelController,
+                      decoration: InputDecoration(
+                        errorText:
+                            _validateError ? 'Channel name is mandatory' : null,
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(width: 1),
+                        ),
+                        hintText: 'Channel name',
                       ),
-                      hintText: 'Channel name',
                     ),
-                  ))
+                  )
                 ],
               ),
               Column(
@@ -88,14 +89,15 @@ class IndexState extends State<IndexPage> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                        child: ElevatedButton(
-                        onPressed: onJoin, 
+                      child: ElevatedButton(
+                        onPressed: onJoin,
                         child: Text('Join'),
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
-                          foregroundColor: MaterialStateProperty.all(Colors.white) 
-                        ),
-                        ),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blueAccent),
+                            foregroundColor:
+                                MaterialStateProperty.all(Colors.white)),
+                      ),
                     ),
                     // Expanded(
                     //   child: RaisedButton(
