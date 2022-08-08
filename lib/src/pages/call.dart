@@ -31,10 +31,14 @@ class _CallPageState extends State<CallPage> {
   void dispose() {
     // clear users
     _users.clear();
-    // destroy sdk
-    _engine.leaveChannel();
-    _engine.destroy();
+    _dispose();
     super.dispose();
+  }
+
+  Future<void> _dispose() async {
+    // destroy sdk
+    await _engine.leaveChannel();
+    await _engine.destroy();
   }
 
   @override
@@ -45,7 +49,7 @@ class _CallPageState extends State<CallPage> {
   }
 
   Future<void> initialize() async {
-    if (APP_ID.isEmpty) {
+    if (appId.isEmpty) {
       setState(() {
         _infoStrings.add(
           'APP_ID missing, please provide your APP_ID in settings.dart',
@@ -57,16 +61,15 @@ class _CallPageState extends State<CallPage> {
 
     await _initAgoraRtcEngine();
     _addAgoraEventHandlers();
-    await _engine.enableWebSdkInteroperability(true);
     VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
     configuration.dimensions = VideoDimensions(width: 1920, height: 1080);
     await _engine.setVideoEncoderConfiguration(configuration);
-    await _engine.joinChannel(Token, widget.channelName!, null, 0);
+    await _engine.joinChannel(token, widget.channelName!, null, 0);
   }
 
   /// Create agora sdk instance and initialize
   Future<void> _initAgoraRtcEngine() async {
-    _engine = await RtcEngine.create(APP_ID);
+    _engine = await RtcEngine.create(appId);
     await _engine.enableVideo();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(widget.role!);
@@ -115,7 +118,8 @@ class _CallPageState extends State<CallPage> {
     if (widget.role == ClientRole.Broadcaster) {
       list.add(RtcLocalView.SurfaceView());
     }
-    _users.forEach((int uid) => list.add(RtcRemoteView.SurfaceView(uid: uid)));
+    _users.forEach((int uid) => list.add(
+        RtcRemoteView.SurfaceView(channelId: widget.channelName!, uid: uid)));
     return list;
   }
 
@@ -236,7 +240,8 @@ class _CallPageState extends State<CallPage> {
             itemCount: _infoStrings.length,
             itemBuilder: (BuildContext context, int index) {
               if (_infoStrings.isEmpty) {
-                return Text("null");  // return type can't be null, a widget was required
+                return Text(
+                    "null"); // return type can't be null, a widget was required
               }
               return Padding(
                 padding: const EdgeInsets.symmetric(
